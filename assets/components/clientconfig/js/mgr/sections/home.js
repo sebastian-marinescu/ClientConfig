@@ -1,3 +1,51 @@
+// source: https://stackoverflow.com/a/6832721/1166642
+function versionCompare(v1, v2, options) {
+    var lexicographical = options && options.lexicographical,
+        zeroExtend = options && options.zeroExtend,
+        v1parts = v1.split('.'),
+        v2parts = v2.split('.');
+
+    function isValidPart(x) {
+        return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
+    }
+
+    if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
+        return NaN;
+    }
+
+    if (zeroExtend) {
+        while (v1parts.length < v2parts.length) v1parts.push("0");
+        while (v2parts.length < v1parts.length) v2parts.push("0");
+    }
+
+    if (!lexicographical) {
+        v1parts = v1parts.map(Number);
+        v2parts = v2parts.map(Number);
+    }
+
+    for (var i = 0; i < v1parts.length; ++i) {
+        if (v2parts.length == i) {
+            return 1;
+        }
+
+        if (v1parts[i] == v2parts[i]) {
+            continue;
+        }
+        else if (v1parts[i] > v2parts[i]) {
+            return 1;
+        }
+        else {
+            return -1;
+        }
+    }
+
+    if (v1parts.length != v2parts.length) {
+        return -1;
+    }
+
+    return 0;
+}
+
 ClientConfig.page.Home = function(config) {
     config = config || {};
     Ext.applyIf(config,{
@@ -130,7 +178,24 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                     field.checked = (value.value);
                 }
 
-                if ((field.xtype === 'radiogroup') || (field.xtype === 'xradiogroup')) {
+		var hasRadioGroupCompatibleVersion = false,
+		    minModx2RGVersion = "2.8.7",
+		    minModx3RGVersion = "3.0.4";
+
+		if (MODx && MODx.config && MODx.config.version) {
+			var modxVersion = MODx.config.version.substring(0, MODx.config.version.length - 3),
+			    modxVersionMajor = parseInt(modxVersion.substring(0, 1));
+
+			if (modxVersionMajor === 2) {
+				hasRadioGroupCompatibleVersion = versionCompare(modxVersion, minModx2RGVersion) !== -1;
+			} else if (modxVersionMajor === 3) {
+				hasRadioGroupCompatibleVersion = versionCompare(modxVersion, minModx3RGVersion) !== -1;
+			} else if (modxVersionMajor > 3) {
+				hasRadioGroupCompatibleVersion = true;
+			}
+		}
+
+                if (((field.xtype === 'radiogroup') || (field.xtype === 'xradiogroup')) && hasRadioGroupCompatibleVersion) {
 		    field.xtype = 'radiogroup';
 		    field.columns = 4;
                     field.items = [];
@@ -154,7 +219,22 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                             })
                         }
                     });
-                }
+                } else if ((field.xtype === 'radiogroup') || (field.xtype === 'xradiogroup')) {
+                    field.xtype = 'radiogroup';
+
+		    var extMC = new Ext.util.MixedCollection();
+
+                    field.items = [{
+		        boxLabel: 'Feature not available in your MODX-version, please update to at least version ' + (modxVersionMajor === 2 ? minModx2RGVersion : minModx3RGVersion),
+                        inputValue: 0,
+                        checked: true,
+                        name: field.name
+		    }];
+
+		    extMC.addAll(field.items);
+		    field.items = extMC;
+		    field.items[0] = extMC.items;
+		}
 
                 if (field.xtype === 'datefield') {
                     field.format = MODx.config.manager_date_format;

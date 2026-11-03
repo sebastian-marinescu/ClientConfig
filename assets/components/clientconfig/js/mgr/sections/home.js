@@ -348,17 +348,24 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                     field.xtype = 'modx-combo-resource';
                     field.hiddenName = value.key;
                     field.anchor = '60%';
-                    field.baseParams = { action: 'resource/getlist' };
+                    field.baseParams = {
+                        action: 'mgr/resources/getlist',
+                        combo: true
+                    };
 
                     if (value.options && value.options.length > 0) {
-                        var optMatch = value.options.match(/context(?:_key)?=([^&|]+)/);
+                        var optMatch = value.options.match(/context(?:_key)?=([^&|,; ]+)/);
                         if (optMatch && optMatch[1]) {
-                            field.baseParams.context_key = optMatch[1];
+                            field.baseParams.context_key = optMatch[1].trim();
                             field.fixedContext = true;
                         }
-                        var parentMatch = value.options.match(/parent=([^&|]+)/);
+                        var parentMatch = value.options.match(/parent=([^&|,; ]+)/);
                         if (parentMatch && parentMatch[1]) {
-                            field.baseParams.parent = parentMatch[1];
+                            field.baseParams.parent = parentMatch[1].trim();
+                        }
+                        var depthMatch = value.options.match(/depth=([^&|,; ]+)/);
+                        if (depthMatch && depthMatch[1]) {
+                            field.baseParams.depth = depthMatch[1].trim();
                         }
                     } else if (ClientConfig.contextAware && ClientConfig.initialContext && ClientConfig.initialContext.key) {
                         field.baseParams.context_key = ClientConfig.initialContext.key;
@@ -582,7 +589,9 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                         form.setValues(r.object);
 
                         // Re-filter resource combos to current context if not hardcoded in options
-                        var resCombos = fp.find('xtype', 'modx-combo-resource');
+                        var resCombos = fp.findBy(function(c) {
+                            return (c instanceof ClientConfig.combo.Resource) || c.xtype === 'modx-combo-resource' || c.xtype === 'clientconfig-combo-resource';
+                        });
                         Ext.each(resCombos, function(rc) {
                             if (!rc.fixedContext) {
                                 rc.baseParams = rc.baseParams || {};
@@ -591,8 +600,10 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                                 } else {
                                     delete rc.baseParams.context_key;
                                 }
+                                rc.lastQuery = null;
                                 if (rc.store) {
                                     rc.store.baseParams = rc.baseParams;
+                                    rc.store.removeAll();
                                 }
                             }
                         });

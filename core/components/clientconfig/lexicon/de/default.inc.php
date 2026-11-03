@@ -49,7 +49,8 @@ $_lang['clientconfig.label'] = 'Bezeichnung';  // Label - Name?
 $_lang['clientconfig.no_configuration_yet'] = 'Keine Konfiguration vorhanden';
 $_lang['clientconfig.no_configuration_yet.desc'] = 'Offenbar wurde noch keine Konfiguration eingerichtet. Wenn Sie der Administrator dieser Site sind, folgen Sie bitte der <a href="http://rtfm.modx.com/display/ADDON/ClientConfig">offiziellen Dokumentation</a>, um eine Konfiguration für Ihren Kunden einzurichten.';
 $_lang['clientconfig.options'] = 'Feld-Optionen';
-$_lang['clientconfig.options.desc'] = 'Für bestimmte Feldtypen wie Selectboxen können Sie Optionen definieren. Trennen Sie die verschiedenen Optionen mit zwei senkrechten Strichen (||), auch Pipe-Symbol genannt, und wenn Sie möchten, dass dem Kunden etwas anderes angezeigt wird als der Wert, verwenden Sie die Schreibweise "Bezeichnung==Wert". ';  // Label - Name?
+$_lang['clientconfig.options.desc'] = 'Für Selectboxen, Checkbox-Gruppen und Radio-Buttons trennen Sie Optionen mit "||" und nutzen "Bezeichnung==Wert". Für Ressourcen-Auswahlfelder können Sie nach Kontext oder Eltern-Ressource filtern (z. B. "context=web&parent=12&depth=2").';
+$_lang['clientconfig.clear'] = 'Leeren';
 $_lang['clientconfig.save_config'] = 'Konfiguration speichern';
 $_lang['clientconfig.sortorder'] = 'Sortierreihenfolge';
 $_lang['clientconfig.settings'] = 'Einstellungen';

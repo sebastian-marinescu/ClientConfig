@@ -35,3 +35,44 @@
 .clientconfig-alert-panel p:last-child {
     margin-bottom: 0;
 }
+
+/* Twin triggers for resource picker combo */
+.x-form-field-wrap .x-form-twin-triggers {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+}
+
+.x-form-field-wrap .x-form-twin-triggers .x-form-trigger {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    display: inline-block;
+    width: 30px;
+    height: 100% !important;
+}
+
+.x-form-field-wrap .x-form-twin-triggers .x-form-clear-trigger:before {
+    content: "\f00d" !important;
+    font-size: 13px;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+
+.x-form-field-wrap .x-form-twin-triggers .x-form-clear-trigger:hover:before {
+    opacity: 1;
+    color: #cf1124;
+}
+
+.x-form-field-wrap .x-form-twin-triggers .x-form-arrow-trigger:before {
+    content: "\f078" !important;
+}
+
+.x-form-field-wrap .x-form-text.x-form-twin-trigger-input {
+    padding-right: 65px;
+}
+

@@ -50,6 +50,7 @@ $_lang['clientconfig.no_configuration_yet'] = 'Keine Konfiguration vorhanden';
 $_lang['clientconfig.no_configuration_yet.desc'] = 'Offenbar wurde noch keine Konfiguration eingerichtet. Wenn Sie der Administrator dieser Site sind, folgen Sie bitte der <a href="http://rtfm.modx.com/display/ADDON/ClientConfig">offiziellen Dokumentation</a>, um eine Konfiguration für Ihren Kunden einzurichten.';
 $_lang['clientconfig.options'] = 'Feld-Optionen';
 $_lang['clientconfig.options.desc'] = 'Für Selectboxen, Checkbox-Gruppen und Radio-Buttons trennen Sie Optionen mit "||" und nutzen "Bezeichnung==Wert". Für Ressourcen-Auswahlfelder können Sie nach Kontext oder Eltern-Ressource filtern (z. B. "context=web&parent=12&depth=2").';
+$_lang['clientconfig.heading_divider'] = 'Trennlinie unter Überschrift anzeigen';
 $_lang['clientconfig.clear'] = 'Leeren';
 $_lang['clientconfig.save_config'] = 'Konfiguration speichern';
 $_lang['clientconfig.sortorder'] = 'Sortierreihenfolge';

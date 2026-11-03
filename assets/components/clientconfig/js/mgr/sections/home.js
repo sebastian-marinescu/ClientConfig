@@ -429,10 +429,14 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                 // Render heading
                 if (['clientconfig-heading', 'heading'].indexOf(field.xtype) !== -1) {
                     var headingText = (value.value !== '') ? value.value : value.label;
+                    var hasLine = true;
+                    if (value.options && (value.options.indexOf('line=0') !== -1 || value.options.indexOf('noline') !== -1 || value.options === '0' || value.options === 'false')) {
+                        hasLine = false;
+                    }
                     field = {
                         xtype: 'clientconfig-heading',
                         html: '<h3>' + Ext.util.Format.htmlEncode(headingText) + '</h3>',
-                        cls: 'clientconfig-heading-wrapper',
+                        cls: 'clientconfig-heading-wrapper' + (hasLine ? '' : ' no-line'),
                         anchor: '100%'
                     };
                     if (ClientConfig.isAdmin && value.key) {

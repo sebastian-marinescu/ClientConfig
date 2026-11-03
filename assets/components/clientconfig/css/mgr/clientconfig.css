@@ -22,6 +22,11 @@
     color: #333;
 }
 
+.clientconfig-heading-wrapper.no-line h3 {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
 .clientconfig-alert-panel {
     margin: 10px 0 15px 0;
     padding: 12px 15px;

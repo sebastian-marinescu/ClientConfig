@@ -278,6 +278,13 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                     field.vtype = 'email';
                 }
 
+                if (['disabled', 'readonly'].indexOf(field.xtype) !== -1) {
+                    field.xtype = 'textfield';
+                    field.readOnly = true;
+                    field.disabled = true;
+                    field.cls = 'x-item-disabled';
+                }
+
                 if (field.xtype === 'modx-combo') {
                     var options = value.options.split('||');
                     var data = [];

@@ -108,3 +108,6 @@ $_lang['clientconfig.global_values'] = 'Global';
 $_lang['clientconfig.config_for_context'] = 'Konfiguration für [[+context]]';
 $_lang['clientconfig.categories'] = 'Kategorien';
 $_lang['clientconfig.process_options'] = 'MODX-Syntax in Optionen auswerten';
+
+$_lang['clientconfig.xtype.disabled'] = 'Deaktiviert / Schreibgeschützt';
+$_lang['clientconfig.xtype.readonly'] = 'Deaktiviert / Schreibgeschützt';

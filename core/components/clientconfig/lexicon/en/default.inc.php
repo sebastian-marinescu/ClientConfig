@@ -116,3 +116,6 @@ $_lang['clientconfig.xtype.email'] = 'Email';
 
 // New 2023-02-26
 $_lang['clientconfig.xtype.radiogroup'] = 'Radio Group';
+
+$_lang['clientconfig.xtype.disabled'] = 'Disabled / Read-only';
+$_lang['clientconfig.xtype.readonly'] = 'Disabled / Read-only';

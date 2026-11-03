@@ -32,6 +32,11 @@ class cgSettingSaveProcessor extends modProcessor {
                 continue;
             }
 
+            // Do not allow modifying disabled / read-only settings from the client view
+            if (in_array($setting->get('xtype'), ['disabled', 'readonly'], true)) {
+                continue;
+            }
+
             if (trim($value) === '' && $setting->get('is_required') &&
                 !in_array($setting->get('xtype'), array('checkbox', 'xcheckbox'), true)) {
                 $this->addFieldError($key, $setting->get('label') . ': ' . $this->modx->lexicon('clientconfig.field_is_required'));

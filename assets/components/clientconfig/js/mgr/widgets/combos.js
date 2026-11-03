@@ -118,6 +118,62 @@ ClientConfig.combo.ContextList = function(config) {
 Ext.extend(ClientConfig.combo.ContextList, MODx.combo.ComboBox);
 Ext.reg('clientconfig-combo-contexts',ClientConfig.combo.ContextList);
 
+ClientConfig.combo.Resource = function(config) {
+    config = config || {};
+    Ext.applyIf(config, {
+        url: MODx.config.connector_url,
+        baseParams: {
+            action: 'resource/getlist'
+        },
+        fields: ['id', 'pagetitle'],
+        displayField: 'pagetitle',
+        valueField: 'id',
+        hiddenName: config.name || 'resource',
+        pageSize: 20,
+        typeAhead: true,
+        editable: true,
+        minChars: 1,
+        emptyText: _('clientconfig.select_resource') || _('resource'),
+        tpl: new Ext.XTemplate(
+            '<tpl for=".">',
+                '<div class="x-combo-list-item">',
+                    '<span><b>{pagetitle}</b> <small style="color: #888;">({id})</small></span>',
+                '</div>',
+            '</tpl>'
+        )
+    });
+    ClientConfig.combo.Resource.superclass.constructor.call(this, config);
+};
+Ext.extend(ClientConfig.combo.Resource, MODx.combo.ComboBox, {
+    setValue: function(val) {
+        ClientConfig.combo.Resource.superclass.setValue.call(this, val);
+        if (val && !isNaN(val)) {
+            var rec = this.findRecord(this.valueField, val);
+            if (!rec) {
+                MODx.Ajax.request({
+                    url: this.url || MODx.config.connector_url,
+                    params: {
+                        action: 'resource/get',
+                        id: val
+                    },
+                    listeners: {
+                        success: {
+                            fn: function(r) {
+                                if (r.object && r.object.pagetitle) {
+                                    this.setRawValue(r.object.pagetitle);
+                                }
+                            },
+                            scope: this
+                        }
+                    }
+                });
+            }
+        }
+    }
+});
+Ext.reg('clientconfig-combo-resource', ClientConfig.combo.Resource);
+Ext.reg('modx-combo-resource', ClientConfig.combo.Resource);
+
 
 ClientConfig.ux.Line = Ext.extend(Ext.Component, {
     autoEl: 'hr'

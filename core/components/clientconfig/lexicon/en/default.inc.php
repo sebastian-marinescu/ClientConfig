@@ -126,3 +126,4 @@ $_lang['clientconfig.xtype.url'] = 'URL';
 $_lang['clientconfig.xtype.tel'] = 'Phone number';
 $_lang['clientconfig.xtype.multi-checkbox'] = 'Multiple Checkboxes';
 $_lang['clientconfig.xtype.alert'] = 'Alert / Notice Box';
+$_lang['clientconfig.select_resource'] = 'Select a resource...';

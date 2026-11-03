@@ -33,7 +33,7 @@ class cgSettingSaveProcessor extends modProcessor {
             }
 
             // Do not allow modifying disabled / read-only or layout settings from the client view
-            if (in_array($setting->get('xtype'), ['disabled', 'readonly', 'clientconfig-line', 'clientconfig-desc', 'clientconfig-info', 'information', 'description'], true)) {
+            if (in_array($setting->get('xtype'), ['disabled', 'readonly', 'clientconfig-line', 'clientconfig-desc', 'clientconfig-info', 'information', 'description', 'clientconfig-heading', 'heading', 'clientconfig-alert', 'alert'], true)) {
                 continue;
             }
 
@@ -48,6 +48,12 @@ class cgSettingSaveProcessor extends modProcessor {
                 case 'checkbox':
                 case 'xcheckbox':
                     $value = !empty($value) ? true : false;
+                    break;
+                case 'multi-checkbox':
+                case 'checkboxgroup':
+                    if (is_array($value)) {
+                        $value = implode(',', $value);
+                    }
                     break;
                 default:
                     break;

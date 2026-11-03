@@ -43,16 +43,22 @@ ClientConfig.combo.FieldTypes = function(config) {
                 ['numberfield', _('clientconfig.xtype.numberfield')],
                 ['colorpickerfield', _('clientconfig.xtype.colorpalette')],
                 ['email', _('clientconfig.xtype.email')],
+                ['url', _('clientconfig.xtype.url')],
+                ['tel', _('clientconfig.xtype.tel')],
                 ['xradiogroup', _('clientconfig.xtype.radiogroup')],
+                ['multi-checkbox', _('clientconfig.xtype.multi-checkbox')],
                 ['xcheckbox', _('clientconfig.xtype.xcheckbox')],
                 ['datefield', _('clientconfig.xtype.datefield')],
                 ['timefield', _('clientconfig.xtype.timefield')],
                 ['password', _('clientconfig.xtype.password')],
                 ['disabled', _('clientconfig.xtype.disabled')],
                 ['modx-combo', _('clientconfig.xtype.combobox')],
+                ['modx-combo-resource', _('clientconfig.xtype.resource')],
                 ['googlefontlist', _('clientconfig.xtype.googlefonts')],
                 ['clientconfig-line', _('clientconfig.xtype.line')],
-                ['clientconfig-desc', _('clientconfig.xtype.desc')]
+                ['clientconfig-heading', _('clientconfig.xtype.heading')],
+                ['clientconfig-desc', _('clientconfig.xtype.desc')],
+                ['clientconfig-alert', _('clientconfig.xtype.alert')]
             ]
         }),
         hiddenName: config.name || 'xtype',
@@ -125,3 +131,19 @@ ClientConfig.ux.Desc = Ext.extend(Ext.Component, {
     }
 });
 Ext.reg('clientconfig-desc', ClientConfig.ux.Desc);
+
+ClientConfig.ux.Heading = Ext.extend(Ext.Component, {
+    autoEl: {
+        tag: 'div',
+        cls: 'clientconfig-heading-wrapper'
+    }
+});
+Ext.reg('clientconfig-heading', ClientConfig.ux.Heading);
+
+ClientConfig.ux.Alert = Ext.extend(Ext.Component, {
+    autoEl: {
+        tag: 'div',
+        cls: 'clientconfig-alert-panel panel-desc'
+    }
+});
+Ext.reg('clientconfig-alert', ClientConfig.ux.Alert);

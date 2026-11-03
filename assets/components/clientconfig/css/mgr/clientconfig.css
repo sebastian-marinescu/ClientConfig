@@ -12,3 +12,26 @@
 .clientconfig-desc-panel p:last-child {
     margin-bottom: 0;
 }
+
+.clientconfig-heading-wrapper h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 25px 0 10px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e4e4e4;
+    color: #333;
+}
+
+.clientconfig-alert-panel {
+    margin: 10px 0 15px 0;
+    padding: 12px 15px;
+    border-radius: 4px;
+    line-height: 1.5;
+    background-color: #fff9e6;
+    border: 1px solid #ffe082;
+    color: #795548;
+}
+
+.clientconfig-alert-panel p:last-child {
+    margin-bottom: 0;
+}

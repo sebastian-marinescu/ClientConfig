@@ -236,6 +236,55 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
 		    field.items[0] = extMC.items;
 		}
 
+                if (((field.xtype === 'multi-checkbox') || (field.xtype === 'checkboxgroup')) && hasRadioGroupCompatibleVersion) {
+                    field.xtype = 'checkboxgroup';
+                    field.columns = 4;
+                    field.items = [];
+
+                    var currentValues = [];
+                    if (field.value) {
+                        if (typeof field.value === 'string') {
+                            if (field.value.indexOf('[') === 0) {
+                                try { currentValues = Ext.decode(field.value); } catch(e) {}
+                            }
+                            if (!currentValues.length) {
+                                currentValues = field.value.split(',');
+                            }
+                        } else if (Ext.isArray(field.value)) {
+                            currentValues = field.value;
+                        }
+                    }
+
+                    var options = value.options ? value.options.split('||') : [];
+                    Ext.each(options, function(option) {
+                        option = option.split('==');
+                        var optVal = option[1] ? option[1] : option[0];
+                        var optLabel = option[0];
+                        field.items.push({
+                            boxLabel: optLabel,
+                            inputValue: optVal,
+                            value: optVal,
+                            name: field.name + '[]',
+                            checked: currentValues.indexOf(optVal) !== -1
+                        });
+                    });
+                } else if ((field.xtype === 'multi-checkbox') || (field.xtype === 'checkboxgroup')) {
+                    field.xtype = 'checkboxgroup';
+
+                    var extMC = new Ext.util.MixedCollection();
+
+                    field.items = [{
+                        boxLabel: 'Feature not available in your MODX-version, please update to at least version ' + (modxVersionMajor === 2 ? minModx2RGVersion : minModx3RGVersion),
+                        inputValue: 0,
+                        checked: true,
+                        name: field.name
+                    }];
+
+                    extMC.addAll(field.items);
+                    field.items = extMC;
+                    field.items[0] = extMC.items;
+                }
+
                 if (field.xtype === 'datefield') {
                     field.format = MODx.config.manager_date_format;
                 }
@@ -278,11 +327,27 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                     field.vtype = 'email';
                 }
 
+                if (field.xtype === 'url') {
+                    field.xtype = 'textfield';
+                    field.vtype = 'url';
+                }
+
+                if (field.xtype === 'tel') {
+                    field.xtype = 'textfield';
+                    field.inputType = 'tel';
+                }
+
                 if (['disabled', 'readonly'].indexOf(field.xtype) !== -1) {
                     field.xtype = 'textfield';
                     field.readOnly = true;
                     field.disabled = true;
                     field.cls = 'x-item-disabled';
+                }
+
+                if (['modx-combo-resource', 'resource'].indexOf(field.xtype) !== -1) {
+                    field.xtype = 'modx-combo-resource';
+                    field.hiddenName = value.key;
+                    field.anchor = '60%';
                 }
 
                 if (field.xtype === 'modx-combo') {
@@ -339,9 +404,51 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                     }
                 }
 
+                // Render heading
+                if (['clientconfig-heading', 'heading'].indexOf(field.xtype) !== -1) {
+                    var headingText = (value.value !== '') ? value.value : value.label;
+                    field = {
+                        xtype: 'clientconfig-heading',
+                        html: '<h3>' + Ext.util.Format.htmlEncode(headingText) + '</h3>',
+                        cls: 'clientconfig-heading-wrapper',
+                        anchor: '100%'
+                    };
+                    if (ClientConfig.isAdmin && value.key) {
+                        field.listeners = {
+                            render: function(comp) {
+                                new Ext.ToolTip({
+                                    target: comp.getEl(),
+                                    html: '<b>[[++' + value.key + ']]</b>'
+                                });
+                            }
+                        };
+                    }
+                }
+
+                // Render alert / callout box
+                if (['clientconfig-alert', 'alert'].indexOf(field.xtype) !== -1) {
+                    var alertHtml = (value.value !== '') ? value.value : (value.default !== '' ? value.default : value.label);
+                    field = {
+                        xtype: 'clientconfig-alert',
+                        html: alertHtml,
+                        cls: 'clientconfig-alert-panel panel-desc',
+                        anchor: '100%'
+                    };
+                    if (ClientConfig.isAdmin && value.key) {
+                        field.listeners = {
+                            render: function(comp) {
+                                new Ext.ToolTip({
+                                    target: comp.getEl(),
+                                    html: '<b>[[++' + value.key + ']]</b>'
+                                });
+                            }
+                        };
+                    }
+                }
+
                 fields.push(field);
 
-                if (value.description && value.description.length > 0 && ['clientconfig-line', 'clientconfig-desc', 'clientconfig-info', 'information', 'description'].indexOf(value.xtype) === -1) {
+                if (value.description && value.description.length > 0 && ['clientconfig-line', 'clientconfig-desc', 'clientconfig-info', 'information', 'description', 'clientconfig-heading', 'heading', 'clientconfig-alert', 'alert'].indexOf(value.xtype) === -1) {
                     var fieldDescription = {
                         xtype: 'label',
                         text: value.description,
@@ -493,6 +600,20 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
             var filePickers = fp.find('xtype', 'modx-panel-tv-file');
             Ext.each(filePickers, function(filePicker){
                 values[filePicker.name] = values['tv' + filePicker.name];
+            }, this);
+
+            // Collect multi-checkbox / checkboxgroup values
+            var checkboxGroups = fp.find('xtype', 'checkboxgroup');
+            Ext.each(checkboxGroups, function(cbg) {
+                var checkedItems = cbg.getValue();
+                var vals = [];
+                if (Ext.isArray(checkedItems)) {
+                    Ext.each(checkedItems, function(cb) {
+                        vals.push(cb.inputValue || cb.value);
+                    });
+                }
+                values[cbg.name] = vals.join(',');
+                delete values[cbg.name + '[]'];
             }, this);
 
             fp.el.mask(_('saving'));

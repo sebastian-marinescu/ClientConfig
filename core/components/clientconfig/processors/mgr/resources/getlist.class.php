@@ -4,37 +4,17 @@
  *
  * @package ClientConfig
  */
-use MODX\Revolution\Processors\Model\GetListProcessor;
-
-// Use old 2.x version if not on MODX 3+
-if (!class_exists(GetListProcessor::class)) {
-    class cgResourcesGetListProcessor extends modObjectGetListProcessor {
-        use cgResourcesGetListTrait;
-    }
-    return 'cgResourcesGetListProcessor';
-}
-
-// 3.x version
-class cgResourcesGetListProcessor extends GetListProcessor {
-    use cgResourcesGetListTrait;
-}
-return 'cgResourcesGetListProcessor';
-
-/**
- * Common trait for both MODX 2 and MODX 3 versions of processor
- */
-trait cgResourcesGetListTrait {
+class cgResourcesGetListProcessor extends modObjectGetListProcessor {
     public $classKey = 'modResource';
-    public $languageTopics = array('resource');
     public $defaultSortField = 'pagetitle';
     public $defaultSortDirection = 'ASC';
+    public $checkListPermission = false;
 
     /**
      * @param xPDOQuery $c
      * @return xPDOQuery
      */
     public function prepareQueryBeforeCount(xPDOQuery $c) {
-        $c->select($this->modx->getSelectColumns('modResource', 'modResource', '', array('id', 'pagetitle', 'context_key', 'parent')));
         $c->where(array(
             'deleted' => 0,
         ));
@@ -66,15 +46,25 @@ trait cgResourcesGetListTrait {
         $query = $this->getProperty('query');
         if (!empty($query)) {
             $c->where(array(
-                'pagetitle:LIKE' => '%' . $query . '%',
-                'OR:longtitle:LIKE' => '%' . $query . '%',
-                'OR:id:=' => $query,
+                array(
+                    'pagetitle:LIKE' => '%' . $query . '%',
+                    'OR:longtitle:LIKE' => '%' . $query . '%',
+                    'OR:id:=' => $query,
+                )
             ));
         }
 
+        return $c;
+    }
+
+    /**
+     * @param xPDOQuery $c
+     * @return xPDOQuery
+     */
+    public function prepareQueryAfterCount(xPDOQuery $c) {
+        $c->select($this->modx->getSelectColumns('modResource', 'modResource', '', array('id', 'pagetitle', 'context_key', 'parent')));
         $c->sortby('context_key', 'ASC');
         $c->sortby('pagetitle', 'ASC');
-
         return $c;
     }
 
@@ -90,4 +80,20 @@ trait cgResourcesGetListTrait {
             'context_key' => $object->get('context_key'),
         );
     }
+
+    /**
+     * Return JSON in the format expected by MODx.combo.ComboBox
+     * @param array $list
+     * @param int|null $total
+     * @return string
+     */
+    public function outputArray(array $list, $total = null) {
+        $total = $total !== null ? $total : count($list);
+        return $this->modx->toJSON(array(
+            'success' => true,
+            'total' => (int)$total,
+            'results' => $list,
+        ));
+    }
 }
+return 'cgResourcesGetListProcessor';

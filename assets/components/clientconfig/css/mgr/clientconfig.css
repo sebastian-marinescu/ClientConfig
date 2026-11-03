@@ -81,30 +81,4 @@
     padding-right: 65px;
 }
 
-/* Styling & invalid state for tel inputs */
-input.x-form-tel,
-input[type="tel"].x-form-field {
-    border: 1px solid #c1c1c1;
-    border-radius: 3px;
-    background-color: #fff;
-    padding: 8px 10px;
-    height: 36px;
-    box-sizing: border-box;
-    font-size: 13px;
-    color: #555;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-input.x-form-tel:focus,
-input[type="tel"].x-form-field:focus {
-    border-color: #5588aa;
-    outline: none;
-}
-
-input.x-form-tel.x-form-invalid,
-input[type="tel"].x-form-field.x-form-invalid {
-    border-color: #cf1124 !important;
-    background-color: #fff6f6;
-}
-
 

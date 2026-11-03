@@ -119,3 +119,4 @@ $_lang['clientconfig.xtype.radiogroup'] = 'Radio Group';
 
 $_lang['clientconfig.xtype.disabled'] = 'Disabled / Read-only';
 $_lang['clientconfig.xtype.readonly'] = 'Disabled / Read-only';
+$_lang['clientconfig.xtype.desc'] = 'Information / Description';

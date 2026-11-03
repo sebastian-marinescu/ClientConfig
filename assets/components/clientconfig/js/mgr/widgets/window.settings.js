@@ -86,10 +86,11 @@ ClientConfig.window.Setting = function(config) {
                         }, scope: this}
                     }
                 },{
-                    xtype: (config.record && config.record.xtype && ['textarea', 'richtext'].indexOf(config.record.xtype) !== -1) ? 'textarea' : 'textfield',
+                    xtype: (config.record && config.record.xtype && ['textarea', 'richtext', 'clientconfig-desc', 'clientconfig-info', 'information', 'description'].indexOf(config.record.xtype) !== -1) ? 'textarea' : 'textfield',
                     name: 'value',
                     fieldLabel: _('clientconfig.value'),
-                    anchor: '100%'
+                    anchor: '100%',
+                    height: (config.record && config.record.xtype && ['clientconfig-desc', 'clientconfig-info', 'information', 'description'].indexOf(config.record.xtype) !== -1) ? 120 : undefined
                 },{
                     xtype: 'textarea',
                     id: config.id + '-options',

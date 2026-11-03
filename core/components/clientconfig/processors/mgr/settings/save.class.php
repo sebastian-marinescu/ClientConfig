@@ -32,8 +32,8 @@ class cgSettingSaveProcessor extends modProcessor {
                 continue;
             }
 
-            // Do not allow modifying disabled / read-only settings from the client view
-            if (in_array($setting->get('xtype'), ['disabled', 'readonly'], true)) {
+            // Do not allow modifying disabled / read-only or layout settings from the client view
+            if (in_array($setting->get('xtype'), ['disabled', 'readonly', 'clientconfig-line', 'clientconfig-desc', 'clientconfig-info', 'information', 'description'], true)) {
                 continue;
             }
 

@@ -318,9 +318,30 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                     }
                 }
 
+                // Render description / information block
+                if (['clientconfig-desc', 'clientconfig-info', 'information', 'description'].indexOf(field.xtype) !== -1) {
+                    var descHtml = (value.value !== '') ? value.value : (value.default !== '' ? value.default : value.label);
+                    field = {
+                        xtype: 'clientconfig-desc',
+                        html: descHtml,
+                        cls: 'clientconfig-desc-panel panel-desc',
+                        anchor: '100%'
+                    };
+                    if (ClientConfig.isAdmin && value.key) {
+                        field.listeners = {
+                            render: function(comp) {
+                                new Ext.ToolTip({
+                                    target: comp.getEl(),
+                                    html: '<b>[[++' + value.key + ']]</b>'
+                                });
+                            }
+                        };
+                    }
+                }
+
                 fields.push(field);
 
-                if (value.description && value.description.length > 0) {
+                if (value.description && value.description.length > 0 && ['clientconfig-line', 'clientconfig-desc', 'clientconfig-info', 'information', 'description'].indexOf(value.xtype) === -1) {
                     var fieldDescription = {
                         xtype: 'label',
                         text: value.description,

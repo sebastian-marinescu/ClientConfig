@@ -51,7 +51,8 @@ ClientConfig.combo.FieldTypes = function(config) {
                 ['disabled', _('clientconfig.xtype.disabled')],
                 ['modx-combo', _('clientconfig.xtype.combobox')],
                 ['googlefontlist', _('clientconfig.xtype.googlefonts')],
-                ['clientconfig-line', _('clientconfig.xtype.line')]
+                ['clientconfig-line', _('clientconfig.xtype.line')],
+                ['clientconfig-desc', _('clientconfig.xtype.desc')]
             ]
         }),
         hiddenName: config.name || 'xtype',
@@ -116,3 +117,11 @@ ClientConfig.ux.Line = Ext.extend(Ext.Component, {
     autoEl: 'hr'
 });
 Ext.reg('clientconfig-line', ClientConfig.ux.Line);
+
+ClientConfig.ux.Desc = Ext.extend(Ext.Component, {
+    autoEl: {
+        tag: 'div',
+        cls: 'clientconfig-desc-panel panel-desc'
+    }
+});
+Ext.reg('clientconfig-desc', ClientConfig.ux.Desc);

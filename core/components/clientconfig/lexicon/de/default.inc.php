@@ -111,3 +111,4 @@ $_lang['clientconfig.process_options'] = 'MODX-Syntax in Optionen auswerten';
 
 $_lang['clientconfig.xtype.disabled'] = 'Deaktiviert / Schreibgeschützt';
 $_lang['clientconfig.xtype.readonly'] = 'Deaktiviert / Schreibgeschützt';
+$_lang['clientconfig.xtype.desc'] = 'Information / Beschreibung';

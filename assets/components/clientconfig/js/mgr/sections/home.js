@@ -356,20 +356,37 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                     };
 
                     if (value.options && value.options.length > 0) {
-                        var optMatch = value.options.match(/context(?:_key)?=([^&|,; ]+)/);
+                        var optMatch = value.options.match(/(?:^|[&,; \t])context(?:_key)?=([^&;]+)/);
                         if (optMatch && optMatch[1]) {
-                            field.baseParams.context_key = optMatch[1].trim();
-                            field.fixedContext = true;
+                            var ctxVal = optMatch[1].trim();
+                            if (ctxVal === '*' || ctxVal.toLowerCase() === 'all') {
+                                delete field.baseParams.context_key;
+                                field.fixedContext = true;
+                            } else if (ctxVal.indexOf('-') === 0 || ctxVal.indexOf('!') === 0) {
+                                field.baseParams.exclude_context = ctxVal.substr(1).trim();
+                            } else {
+                                field.baseParams.context_key = ctxVal;
+                                field.fixedContext = true;
+                            }
                         }
-                        var parentMatch = value.options.match(/parent=([^&|,; ]+)/);
+
+                        var excludeMatch = value.options.match(/(?:^|[&,; \t])(?:exclude_contexts?|exclude|-context(?:_key)?)=([^&;]+)/);
+                        if (excludeMatch && excludeMatch[1]) {
+                            field.baseParams.exclude_context = excludeMatch[1].trim();
+                        }
+
+                        var parentMatch = value.options.match(/(?:^|[&,; \t])parent=([^&;]+)/);
                         if (parentMatch && parentMatch[1]) {
                             field.baseParams.parent = parentMatch[1].trim();
                         }
-                        var depthMatch = value.options.match(/depth=([^&|,; ]+)/);
+
+                        var depthMatch = value.options.match(/(?:^|[&,; \t])depth=([^&;]+)/);
                         if (depthMatch && depthMatch[1]) {
                             field.baseParams.depth = depthMatch[1].trim();
                         }
-                    } else if (ClientConfig.contextAware && ClientConfig.initialContext && ClientConfig.initialContext.key) {
+                    }
+
+                    if (!field.fixedContext && ClientConfig.contextAware && ClientConfig.initialContext && ClientConfig.initialContext.key) {
                         field.baseParams.context_key = ClientConfig.initialContext.key;
                     }
                 }

@@ -19,10 +19,61 @@ class cgResourcesGetListProcessor extends modObjectGetListProcessor {
             'deleted' => 0,
         ));
 
-        // Filter by Context if provided
+        // Filter / Exclude Context(s) if provided
         $context = $this->getProperty('context_key');
+        $excludeContext = $this->getProperty('exclude_context');
+        if (empty($excludeContext)) {
+            $excludeContext = $this->getProperty('exclude_contexts');
+        }
+        if (empty($excludeContext)) {
+            $excludeContext = $this->getProperty('exclude');
+        }
+
+        $includeContexts = array();
+        $excludeContexts = array();
+
+        if (!empty($excludeContext)) {
+            if (is_string($excludeContext)) {
+                $excludeContexts = array_merge($excludeContexts, preg_split('/[,|]/', $excludeContext));
+            } elseif (is_array($excludeContext)) {
+                $excludeContexts = array_merge($excludeContexts, $excludeContext);
+            } else {
+                $excludeContexts[] = (string)$excludeContext;
+            }
+        }
+
         if (!empty($context)) {
-            $c->where(array('context_key' => $context));
+            $rawContexts = is_array($context) ? $context : preg_split('/[,|]/', (string)$context);
+            foreach ($rawContexts as $ctx) {
+                $ctx = trim($ctx);
+                if ($ctx === '' || $ctx === '*' || strtolower($ctx) === 'all') {
+                    continue;
+                }
+                if ($ctx[0] === '-' || $ctx[0] === '!') {
+                    $excludeContexts[] = substr($ctx, 1);
+                } else {
+                    $includeContexts[] = $ctx;
+                }
+            }
+        }
+
+        $excludeContexts = array_values(array_unique(array_filter(array_map('trim', $excludeContexts))));
+        $includeContexts = array_values(array_unique(array_filter(array_map('trim', $includeContexts))));
+
+        if (!empty($includeContexts)) {
+            if (count($includeContexts) === 1) {
+                $c->where(array('context_key' => reset($includeContexts)));
+            } else {
+                $c->where(array('context_key:IN' => $includeContexts));
+            }
+        }
+
+        if (!empty($excludeContexts)) {
+            if (count($excludeContexts) === 1) {
+                $c->where(array('context_key:!=' => reset($excludeContexts)));
+            } else {
+                $c->where(array('context_key:NOT IN' => $excludeContexts));
+            }
         }
 
         // Filter by Parent and Depth if provided
@@ -31,7 +82,7 @@ class cgResourcesGetListProcessor extends modObjectGetListProcessor {
             $parent = (int)$parent;
             $depth = (int)$this->getProperty('depth', 1);
             if ($depth > 1) {
-                $childIds = $this->modx->getChildIds($parent, $depth, !empty($context) ? array('context' => $context) : array());
+                $childIds = $this->modx->getChildIds($parent, $depth, !empty($includeContexts) && count($includeContexts) === 1 ? array('context' => reset($includeContexts)) : array());
                 if (!empty($childIds)) {
                     $c->where(array('id:IN' => $childIds));
                 } else {

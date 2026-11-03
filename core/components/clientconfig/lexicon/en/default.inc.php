@@ -49,7 +49,7 @@ $_lang['clientconfig.label'] = 'Label';
 $_lang['clientconfig.no_configuration_yet'] = 'No Configuration Available';
 $_lang['clientconfig.no_configuration_yet.desc'] = 'It seems there is no configuration set up yet. If you are the administrator of the site, please <a href="http://rtfm.modx.com/display/ADDON/ClientConfig">follow the official documentation</a> to set up configuration for your client.';
 $_lang['clientconfig.options'] = 'Field Options';
-$_lang['clientconfig.options.desc'] = 'For select boxes, multi-select checkboxes, and radio groups, separate options with "||" and use "label==value". For Resource pickers, you can filter by context or parent container (e.g. "context=web&parent=12&depth=2").';
+$_lang['clientconfig.options.desc'] = 'For select boxes, multi-select checkboxes, and radio groups, separate options with "||" and use "label==value". For Resource pickers, you can filter or exclude contexts and filter by parent container (e.g. "context=web&parent=12&depth=2" or "exclude_context=trash").';
 $_lang['clientconfig.heading_divider'] = 'Show divider line below heading';
 $_lang['clientconfig.invalid_phone'] = 'Please enter a valid telephone number.';
 $_lang['clientconfig.clear'] = 'Clear';

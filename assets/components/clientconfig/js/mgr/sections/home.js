@@ -348,6 +348,21 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                     field.xtype = 'modx-combo-resource';
                     field.hiddenName = value.key;
                     field.anchor = '60%';
+                    field.baseParams = { action: 'resource/getlist' };
+
+                    if (value.options && value.options.length > 0) {
+                        var optMatch = value.options.match(/context(?:_key)?=([^&|]+)/);
+                        if (optMatch && optMatch[1]) {
+                            field.baseParams.context_key = optMatch[1];
+                            field.fixedContext = true;
+                        }
+                        var parentMatch = value.options.match(/parent=([^&|]+)/);
+                        if (parentMatch && parentMatch[1]) {
+                            field.baseParams.parent = parentMatch[1];
+                        }
+                    } else if (ClientConfig.contextAware && ClientConfig.initialContext && ClientConfig.initialContext.key) {
+                        field.baseParams.context_key = ClientConfig.initialContext.key;
+                    }
                 }
 
                 if (field.xtype === 'modx-combo') {
@@ -565,6 +580,22 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                         // Set the new context-specific values
                         form.reset();
                         form.setValues(r.object);
+
+                        // Re-filter resource combos to current context if not hardcoded in options
+                        var resCombos = fp.find('xtype', 'modx-combo-resource');
+                        Ext.each(resCombos, function(rc) {
+                            if (!rc.fixedContext) {
+                                rc.baseParams = rc.baseParams || {};
+                                if (ctx && ctx.length > 0) {
+                                    rc.baseParams.context_key = ctx;
+                                } else {
+                                    delete rc.baseParams.context_key;
+                                }
+                                if (rc.store) {
+                                    rc.store.baseParams = rc.baseParams;
+                                }
+                            }
+                        });
 
                         // Re-initialize editors
                         if (MODx.loadRTE) {

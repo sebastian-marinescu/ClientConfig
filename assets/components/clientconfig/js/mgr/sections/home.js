@@ -335,6 +335,8 @@ Ext.extend(ClientConfig.page.Home,MODx.Component,{
                 if (field.xtype === 'tel') {
                     field.xtype = 'textfield';
                     field.inputType = 'tel';
+                    field.cls = (field.cls ? field.cls + ' ' : '') + 'x-form-text';
+                    field.vtype = 'tel';
                 }
 
                 if (['disabled', 'readonly'].indexOf(field.xtype) !== -1) {

@@ -1,3 +1,13 @@
+if (Ext.form && Ext.form.VTypes) {
+    Ext.apply(Ext.form.VTypes, {
+        tel: function(val) {
+            if (!val || val.length === 0) return true;
+            return /^\+?[0-9\s\.\-\/\(\)\'\*]{3,30}$/.test(val.trim()) && /[0-9]/.test(val);
+        },
+        telText: _('clientconfig.invalid_phone') || 'Please enter a valid telephone number'
+    });
+}
+
 ClientConfig.combo.Groups = function(config) {
     config = config || {};
     Ext.applyIf(config,{

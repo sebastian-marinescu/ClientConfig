@@ -51,6 +51,7 @@ $_lang['clientconfig.no_configuration_yet.desc'] = 'It seems there is no configu
 $_lang['clientconfig.options'] = 'Field Options';
 $_lang['clientconfig.options.desc'] = 'For select boxes, multi-select checkboxes, and radio groups, separate options with "||" and use "label==value". For Resource pickers, you can filter by context or parent container (e.g. "context=web&parent=12&depth=2").';
 $_lang['clientconfig.heading_divider'] = 'Show divider line below heading';
+$_lang['clientconfig.invalid_phone'] = 'Please enter a valid telephone number.';
 $_lang['clientconfig.clear'] = 'Clear';
 $_lang['clientconfig.save_config'] = 'Save Configuration';
 $_lang['clientconfig.sortorder'] = 'Sort Order';

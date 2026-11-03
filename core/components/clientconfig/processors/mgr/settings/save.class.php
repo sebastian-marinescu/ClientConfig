@@ -55,6 +55,12 @@ class cgSettingSaveProcessor extends modProcessor {
                         $value = implode(',', $value);
                     }
                     break;
+                case 'tel':
+                    if (!empty($value) && (!preg_match('/^\+?[0-9\s\.\-\/\(\)\'\*]{3,30}$/', trim($value)) || !preg_match('/[0-9]/', $value))) {
+                        $this->addFieldError($key, $setting->get('label') . ': ' . $this->modx->lexicon('clientconfig.invalid_phone'));
+                        continue 2;
+                    }
+                    break;
                 default:
                     break;
             }

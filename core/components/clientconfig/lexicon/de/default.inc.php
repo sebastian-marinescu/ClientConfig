@@ -51,6 +51,7 @@ $_lang['clientconfig.no_configuration_yet.desc'] = 'Offenbar wurde noch keine Ko
 $_lang['clientconfig.options'] = 'Feld-Optionen';
 $_lang['clientconfig.options.desc'] = 'Für Selectboxen, Checkbox-Gruppen und Radio-Buttons trennen Sie Optionen mit "||" und nutzen "Bezeichnung==Wert". Für Ressourcen-Auswahlfelder können Sie nach Kontext oder Eltern-Ressource filtern (z. B. "context=web&parent=12&depth=2").';
 $_lang['clientconfig.heading_divider'] = 'Trennlinie unter Überschrift anzeigen';
+$_lang['clientconfig.invalid_phone'] = 'Bitte geben Sie eine gültige Telefonnummer ein.';
 $_lang['clientconfig.clear'] = 'Leeren';
 $_lang['clientconfig.save_config'] = 'Konfiguration speichern';
 $_lang['clientconfig.sortorder'] = 'Sortierreihenfolge';
